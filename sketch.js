@@ -19,7 +19,7 @@ var instructions = [
     ["rotate", 90],
     ["color", 2],
     ["forward", 200],
-    ["rotate", 30],
+    ["rotate", 90],
     ["color", 3],
     ["forward", 200],
 ];
@@ -34,7 +34,7 @@ function setup() {
         windowHeight
     );
     var initialPosition = {
-        x: windowWidth / 2, 
+        x: windowWidth / 2,
         y: windowHeight / 2
     };
     transforms.push(["translate", initialPosition.x, initialPosition.y]);
@@ -42,12 +42,31 @@ function setup() {
     angleMode(DEGREES);
 }
 
+var lineLength = 0;
+var drawn = 0;
+var drawingSpeed = 8;
+
 function draw() {
+    if(drawn < lineLength) {
+        drawn = Math.min(lineLength, drawn + drawingSpeed);
+        drawLine(drawn);
+    } else {
+        popInstruction();
+    }
+}
+
+function drawLine(length) {
+    // Apply every transform except the last one
+    // (which we're currently drawing)
+    applyTransforms(transforms.slice(0, -1));
+    stroke(currentColor);
+    line(0, 0, length, 0);
+}
+
+function popInstruction() {
     if(instructions.length == 0) {
         return;
     }
-    applyTransforms(transforms);
-    stroke(currentColor);
     var [command, value] = instructions.shift();
     switch(command) {
         case "color":
@@ -65,7 +84,8 @@ function draw() {
         case "forward":
             transforms.push(["translate", value + 1, 0]);
             if(penDown) {
-                line(0, 0, value, 0);
+                lineLength = value;
+                drawn = 0;
             }
             break;
     }
