@@ -9,16 +9,11 @@ var colors = [
     [255, 255, 0]
 ];
 
-var instructions = [];
 var penDown = false;
 var currentColor = colors[0];
 var transforms = [];
 
 function setup() {
-    for(i = 0; i < 50; i++) {
-        var instruction = randomInstruction();
-        instructions.push(instruction);
-    }
     createCanvas(
         windowWidth,
         windowHeight
@@ -96,30 +91,4 @@ function applyTransforms(transforms) {
                 break;
         }
     });
-}
-
-function randomInstruction() {
-    commands = ["up", "down", "color", "rotate", "forward"];
-    var command = choice(commands);
-    var instruction = [command];
-    switch(command) {
-        case "up":
-        case "down":
-            return [command];
-        case "color":
-            var colorCode = choice(range(colors.length-1));
-            return [command, colorCode];
-        case "rotate":
-            return [command, Math.floor(Math.random()*360)];
-        case "forward":
-            return [command, Math.floor(Math.random()*200)];
-    }
-}
-
-function choice(array) {
-    return array[Math.floor(Math.random()*array.length)];
-}
-
-function range(n) {
-    return Array.apply(null, Array(n)).map((_, i) => i);
 }

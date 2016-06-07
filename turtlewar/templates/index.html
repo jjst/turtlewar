@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <script type="text/javascript">
+        instructions = {{ drawing.instructions|tojson|safe }};
+    </script>
+
+    <script src="/static/p5.js"></script>
+    <script type="text/javascript" src="/static/sketch.js"></script>
+{% endblock %}
+
+{% block body %}
+    <div id="contents"></div>
+{% endblock %}
