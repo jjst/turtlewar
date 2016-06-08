@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 
 {% block head %}
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
     <script type="text/javascript">
-        instructions = {{ drawing.instructions|tojson|safe }};
+        drawing1 = {{ drawing1.instructions|tojson|safe }};
+        drawing2 = {{ drawing2.instructions|tojson|safe }};
     </script>
 
     <script src="/static/p5.js"></script>
@@ -10,5 +12,8 @@
 {% endblock %}
 
 {% block body %}
-    <div id="contents"></div>
+    <section>
+        <div id="one"></div>
+        <div id="two"></div>
+    </section>
 {% endblock %}
