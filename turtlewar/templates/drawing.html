@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="/static/style.css">
+    <script src="/static/p5.js"></script>
+    <script type="text/javascript" src="/static/sketch.js"></script>
+    <script type="text/javascript">
+        instructions = {{ drawing_instructions|tojson|safe }};
+        var sketch = new p5(drawInstructions(instructions, "drawing"), "drawing");
+    </script>
+{% endblock %}
+
+{% block body %}
+    <div id="drawing"></div>
+{% endblock %}

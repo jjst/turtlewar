@@ -2,18 +2,19 @@
 
 {% block head %}
     <link rel="stylesheet" type="text/css" href="/static/style.css">
-    <script type="text/javascript">
-        drawing1 = {{ drawing1.instructions|tojson|safe }};
-        drawing2 = {{ drawing2.instructions|tojson|safe }};
-    </script>
-
     <script src="/static/p5.js"></script>
     <script type="text/javascript" src="/static/sketch.js"></script>
+    <script type="text/javascript">
+        drawing1 = {{ drawing1.instructions|tojson|safe }};
+        var sketch1 = new p5(drawInstructions(drawing1, "{{ drawing1._id }}"), "one");
+        drawing2 = {{ drawing2.instructions|tojson|safe }};
+        var sketch2 = new p5(drawInstructions(drawing2, "{{ drawing2._id }}"), "two");
+    </script>
 {% endblock %}
 
 {% block body %}
     <section>
-        <div id="one"></div>
-        <div id="two"></div>
+        <div id="d1"><a href="/battle/{{ drawing1._id }}/{{ drawing2._id }}/" id="one"</a></div>
+        <div id="d2"><a href="/battle/{{ drawing2._id }}/{{ drawing1._id }}/" id="two"</a></div>
     </section>
 {% endblock %}

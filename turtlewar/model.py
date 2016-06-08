@@ -1,4 +1,6 @@
 import random
+import pymongo
+from turtlewar import app, mongo
 
 commands = [
     "up",
@@ -19,10 +21,20 @@ colors = [
     (255, 255, 0)
 ]
 
+generation_size = 10
+
+def current_generation():
+    with app.app_context():
+        return mongo.db.drawings.find().sort([['generation', pymongo.DESCENDING]]).limit(1).next()['generation']
+
 
 class Drawing(object):
     def __init__(self, instructions):
         self.instructions = instructions
+        self.wins = 0
+        self.losses = 0
+        self.battles = 0
+        self.generation = 1
 
 
 def generate_drawing(num_instructions=50):

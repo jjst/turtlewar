@@ -98,5 +98,3 @@ var drawInstructions = function(instructions, canvasId) {
     }
 }
 
-var sketch1 = new p5(drawInstructions(drawing1, "c1"), "one");
-var sketch2 = new p5(drawInstructions(drawing2, "c2"), "two");

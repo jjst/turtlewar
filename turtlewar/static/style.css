@@ -4,14 +4,20 @@ section {
     margin: auto;
     padding: 10px;
 }
-div#one {
+
+div#d1 {
     width: 50%;
     height: 500px;
     float: left;
     margin: 20px;
 }
-div#two {
+
+div#d2 {
     margin-left: 50%;
     height: 500px;
     margin: 20px;
+}
+
+div#d1 canvas, div#d2 canvas {
+    cursor: pointer;
 }
