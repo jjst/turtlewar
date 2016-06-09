@@ -1,29 +1,37 @@
 from turtlewar import app, mongo
+from turtlewar.model import Drawing, current_generation, battles_to_fight
 import random
-from turtlewar.model import Drawing, current_generation
 from flask import render_template, redirect
+import pymongo
+from bson.objectid import ObjectId
 
 
-def get_random_drawing():
+def fetch_2_random_drawings():
+    """
+    Fetch 2 random, different drawings from the current generation
+    """
     current_gen = current_generation()
-    count = mongo.db.drawings.count(
-        {'generation': current_gen}
-    )
-    r = random.randint(0, count-1)
-    drawing = mongo.db.drawings.find(
-        {'generation': current_gen}
-    ).limit(-1).skip(r).next()
-    mongo.db.drawings.update_one(
-        {'_id': drawing['_id']},
-        {'$inc': {'battles': 1}}
-    )
-    return drawing
+    drawings = list(mongo.db.drawings.find(
+        {'generation': current_gen,
+         'battles': {"$lt": battles_to_fight}}
+    ))
+    if len(drawings) == 0:
+        raise RuntimeError("Generation has fought enough, they're tired of this shit")
+    # Choose 2 different drawings: shuffle the list and take the first two
+    random.shuffle(drawings)
+    d1, d2 = drawings[0:2]
+    # Mark them as battling
+    for d in (d1, d2):
+        mongo.db.drawings.update_one(
+            {'_id': d['_id']},
+            {'$inc': {'battles': 1}}
+        )
+    return d1, d2
 
 
 @app.route('/')
 def index():
-    d1 = get_random_drawing()
-    d2 = get_random_drawing()
+    d1, d2 = fetch_2_random_drawings()
     return render_template(
         'index.html',
         drawing1=d1,

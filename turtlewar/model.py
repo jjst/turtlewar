@@ -22,6 +22,7 @@ colors = [
 ]
 
 generation_size = 10
+battles_to_fight = 5
 
 def current_generation():
     with app.app_context():
