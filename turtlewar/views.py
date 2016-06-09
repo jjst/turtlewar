@@ -15,7 +15,14 @@ def fetch_2_random_drawings():
         {'generation': current_gen,
          'battles': {"$lt": battles_to_fight}}
     ))
-    if len(drawings) == 0:
+    # FIXME: this method of selecting 2 drawings doesn't guarantee that we
+    # end up selecting drawings in such a way that at the end, some drawing
+    # is left alone still needing to fight 2 battles while all others have
+    # fought enough, in this case we're stuck because we can't select the
+    # drawing to fight against itself.
+    # Long-term planned fix is to have the battles pre-generated when
+    # creating a new generation
+    if len(drawings) < 2:
         raise RuntimeError("Generation has fought enough, they're tired of this shit")
     # Choose 2 different drawings: shuffle the list and take the first two
     random.shuffle(drawings)
