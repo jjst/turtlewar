@@ -43,11 +43,11 @@ def drawing(drawing_id):
 @app.route('/battle/<winner>/<loser>/')
 def update_scores(winner, loser):
     mongo.db.drawings.update_one(
-        {'_id': winner},
+        {'_id': ObjectId(winner)},
         {'$inc': {'wins': 1}}
     )
     mongo.db.drawings.update_one(
-        {'_id': loser},
+        {'_id': ObjectId(loser)},
         {'$inc': {'losses': 1}}
     )
     return redirect('/')
