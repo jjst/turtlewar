@@ -13,6 +13,9 @@
 {% endblock %}
 
 {% block body %}
+    <div id="info">
+    <p>Generation: {{ generation }}</p>
+    </div>
     <section>
         <div id="d1"><a href="/battle/{{ drawing1._id }}/{{ drawing2._id }}/" id="one"</a></div>
         <div id="d2"><a href="/battle/{{ drawing2._id }}/{{ drawing1._id }}/" id="two"</a></div>

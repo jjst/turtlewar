@@ -10,9 +10,17 @@ class TestDrawing:
         d = Drawing([1, 2])
         assert d.generation == 1
 
+    def test_drawing_generation_cant_be_smaller_than_birth_generation(self):
+        with pytest.raises(ValueError):
+            Drawing([1, 2], generation=1, birth_generation=2)
+
     def test_drawing_generation_starts_at_birth_generation(self):
         d = Drawing([1, 2], birth_generation=5)
         assert d.generation == d.birth_generation
+
+    def test_drawing_generation_can_be_specified_in_constructor(self):
+        d = Drawing([1, 2], generation=3, birth_generation=2)
+        assert d.generation == 3
 
     def test_cross(self):
         d1 = Drawing([1, 2, 3, 4])
@@ -46,10 +54,30 @@ class TestDrawing:
         d2 = Drawing(['a', 'b', 'c', 'd'], birth_generation=3)
         assert d1.cross(d2).birth_generation == 4
 
-    def test_survive(self):
+    def test_survive_should_increment_generation(self):
         d = Drawing([1, 2, 3, 4], birth_generation=3)
-        d.survive()
-        assert d.generation == 4
+        new_drawing = d.survive()
+        assert new_drawing.generation == 4
+
+    def test_survive_should_keep_birth_generation(self):
+        d = Drawing([1, 2, 3, 4], birth_generation=3)
+        new_drawing = d.survive()
+        assert new_drawing.birth_generation == 3
+
+    def test_survive_should_keep_instructions(self):
+        d = Drawing([1, 2, 3, 4], birth_generation=3)
+        new_drawing = d.survive()
+        assert new_drawing.instructions == d.instructions
+
+    def test_survive_should_reset_id_and_battle_counts(self):
+        d = Drawing(
+            [1, 2, 3, 4], birth_generation=3, _id=5,
+            battles=5, wins=3, losses=2)
+        new_drawing = d.survive()
+        with pytest.raises(AttributeError):
+            new_drawing._id
+        assert (
+            new_drawing.battles == new_drawing.wins == new_drawing.losses == 0)
 
     def test_mutate(self):
         d = generate_drawing(num_instructions=6)

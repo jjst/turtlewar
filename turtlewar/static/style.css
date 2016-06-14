@@ -21,3 +21,7 @@ div#d2 {
 div#d1 canvas, div#d2 canvas {
     cursor: pointer;
 }
+
+div#info {
+    clear: left;
+}
