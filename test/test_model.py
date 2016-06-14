@@ -117,7 +117,7 @@ class TestDrawing:
                     potential_parent.instructions[half_length:]
                 )
                 if ((first_half == parent_first_half and second_half != parent_second_half) or
-                    (first_half != parent_first_half and second_half == parent_second_half)):
+                        (first_half != parent_first_half and second_half == parent_second_half)):
                     return True
             return False
 
@@ -141,7 +141,7 @@ class TestDrawing:
         def new_fitness(self):
             up_count = len([i for i in self.instructions if i == 'up'])
             down_count = len([i for i in self.instructions if i == 'down'])
-            return float(up_count - down_count)/len(self.instructions)
+            return float(up_count - down_count) / len(self.instructions)
         generation = []
         for _ in xrange(20):
             generation += [copy.deepcopy(the_best), copy.deepcopy(the_worst)]
@@ -154,13 +154,16 @@ class TestDrawing:
     def test_new_generations_converge_towards_better_fitness(self):
         generation = [generate_drawing() for i in range(11)]
         iteration_count = 4000
-        new_fitness = lambda self: len([i for i in self.instructions if i == ['up']])
+        new_fitness = lambda self: len(
+            [i for i in self.instructions if i == ['up']])
         for drawing in generation:
             drawing.fitness = new.instancemethod(new_fitness, drawing, None)
-        initial_best_fitness = max([drawing.fitness() for drawing in generation])
+        initial_best_fitness = max([drawing.fitness()
+                                    for drawing in generation])
         for i in xrange(iteration_count):
             for drawing in generation:
-                drawing.fitness = new.instancemethod(new_fitness, drawing, None)
+                drawing.fitness = new.instancemethod(
+                    new_fitness, drawing, None)
             generation = Drawing.new_generation(generation)
         final_best_fitness = max([drawing.fitness() for drawing in generation])
         assert final_best_fitness >= initial_best_fitness

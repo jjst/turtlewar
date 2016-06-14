@@ -25,12 +25,15 @@ generation_size = 10
 battles_to_fight = 5
 mutation_rate = 0.4
 
+
 def current_generation():
     with app.app_context():
-        return mongo.db.drawings.find().sort([['generation', pymongo.DESCENDING]]).limit(1).next()['generation']
+        return mongo.db.drawings.find().sort(
+            [['generation', pymongo.DESCENDING]]).limit(1).next()['generation']
 
 
 class Drawing(object):
+
     def __init__(self, instructions, birth_generation=1):
         self.instructions = instructions
         self.wins = 0
@@ -41,13 +44,15 @@ class Drawing(object):
 
     def cross(self, other_drawing):
         if self.generation != other_drawing.generation:
-            raise ValueError("Drawings must be of the same generation to cross")
+            raise ValueError(
+                "Drawings must be of the same generation to cross")
         if len(self.instructions) != len(other_drawing.instructions):
             raise ValueError("Can't cross drawings of different lengths")
         half_length = len(self.instructions) / 2
         return Drawing(
-            self.instructions[:half_length] + other_drawing.instructions[half_length:],
-            birth_generation=self.generation+1
+            self.instructions[:half_length] +
+            other_drawing.instructions[half_length:],
+            birth_generation=self.generation + 1
         )
 
     def survive(self):
@@ -65,7 +70,8 @@ class Drawing(object):
     @staticmethod
     def new_generation(generation):
         half_length = len(generation) / 2
-        generation = sorted(generation, key=lambda drawing: (drawing.fitness() + 1) + random.random(), reverse=True)
+        generation = sorted(generation, key=lambda drawing: (
+            drawing.fitness() + 1) + random.random(), reverse=True)
         survivors = generation[:half_length]
         child_count = len(generation) - half_length
         children = []
