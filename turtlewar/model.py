@@ -2,15 +2,15 @@ import random
 import pymongo
 from turtlewar import app, mongo
 
-commands = [
+commands = (
     "up",
     "down",
     "color",
     "forward",
     "rotate"
-]
+)
 
-colors = [
+colors = (
     (0, 0, 0),
     (255, 255, 255),
     (255, 0, 0),
@@ -19,7 +19,7 @@ colors = [
     (0, 255, 255),
     (255, 0, 255),
     (255, 255, 0)
-]
+)
 
 generation_size = 10
 battles_to_fight = 5
@@ -105,11 +105,11 @@ def generate_drawing(num_instructions=50):
 def generate_instruction():
     command = random.choice(commands)
     if command in ('up', 'down'):
-        return [command]
+        return (command,)
     elif command == "color":
         colorid = random.randint(0, len(colors) - 1)
-        return [command, colorid]
+        return (command, colorid)
     elif command == "rotate":
-        return [command, random.randint(0, 360)]
+        return (command, random.randint(0, 360))
     elif command == "forward":
-        return [command, random.randint(0, 200)]
+        return (command, random.randint(0, 200))

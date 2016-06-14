@@ -111,14 +111,20 @@ class TestDrawing:
                 child.instructions[:half_length],
                 child.instructions[half_length:]
             )
-            for potential_parent in potential_parents:
-                parent_first_half, parent_second_half = (
-                    potential_parent.instructions[:half_length],
-                    potential_parent.instructions[half_length:]
-                )
-                if ((first_half == parent_first_half and second_half != parent_second_half) or
-                        (first_half != parent_first_half and second_half == parent_second_half)):
-                    return True
+            parent_first_halves = [
+                p.instructions[:half_length] for p in potential_parents]
+            parent_second_halves = [
+                p.instructions[half_length:] for p in potential_parents]
+            # Look for an identical half, and another half which is either
+            # identical, or has just 1 element different.
+            if first_half in parent_first_halves:
+                for parent_second_half in parent_second_halves:
+                    if len(set(second_half) - set(parent_second_half)) <= 1:
+                        return True
+            elif second_half in parent_second_halves:
+                for parent_first_half in parent_first_halves:
+                    if len(set(first_half) - set(parent_first_half)) <= 1:
+                        return True
             return False
 
         generation = [generate_drawing() for i in range(11)]
@@ -153,7 +159,7 @@ class TestDrawing:
 
     def test_new_generations_converge_towards_better_fitness(self):
         generation = [generate_drawing() for i in range(11)]
-        iteration_count = 4000
+        iteration_count = 1500
         new_fitness = lambda self: len(
             [i for i in self.instructions if i == ['up']])
         for drawing in generation:
