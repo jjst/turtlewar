@@ -80,8 +80,7 @@ class Drawing(object):
         child_count = len(generation) - half_length
         children = []
         for i in xrange(child_count):
-            parent1 = random.choice(survivors)
-            parent2 = random.choice(survivors)
+            parent1, parent2 = random.sample(survivors, 2)
             child = parent1.cross(parent2)
             if random.random() < mutation_rate:
                 child.mutate()
@@ -120,9 +119,12 @@ def fetch_2_random_drawings():
     if len(drawings) < 2:
         generate_and_save_new_generation()
         return fetch_2_random_drawings()
-    # Choose 2 different drawings: shuffle the list and take the first two
-    random.shuffle(drawings)
-    d1, d2 = drawings[0:2]
+    # Choose 2 different drawings
+    d1, d2 = random.sample(drawings, 2)
+    app.logger.debug(
+        "Selected drawings %s and %s to fight" %
+        (drawings.index(d1), drawings.index(d2))
+    )
     # Mark them as battling
     for d in (d1, d2):
         mongo.db.drawings.update_one(
