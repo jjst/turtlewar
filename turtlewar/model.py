@@ -173,4 +173,4 @@ def generate_instruction():
     elif command == "rotate":
         return (command, random.randint(0, 360))
     elif command == "forward":
-        return (command, random.randint(0, 200))
+        return (command, int(random.betavariate(1, 3) * 150))
