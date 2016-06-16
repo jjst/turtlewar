@@ -1,4 +1,5 @@
 import random
+from random import randint
 import pymongo
 from turtlewar import app, mongo
 
@@ -10,19 +11,9 @@ commands = (
     "rotate"
 )
 
-colors = (
-    (0, 0, 0),
-    (255, 255, 255),
-    (255, 0, 0),
-    (0, 255, 0),
-    (0, 0, 255),
-    (0, 255, 255),
-    (255, 0, 255),
-    (255, 255, 0)
-)
-
+num_instructions = 500
 generation_size = 20
-battles_to_fight = 3
+battles_to_fight = 1
 mutation_rate = 0.4
 
 
@@ -161,7 +152,7 @@ def generate_and_save_new_generation():
             [drawing.__dict__ for drawing in new_drawings])
 
 
-def generate_drawing(num_instructions=50):
+def generate_drawing(num_instructions=num_instructions):
     return Drawing([generate_instruction() for _ in xrange(num_instructions)])
 
 
@@ -170,9 +161,12 @@ def generate_instruction():
     if command in ('up', 'down'):
         return (command,)
     elif command == "color":
-        colorid = random.randint(0, len(colors) - 1)
-        return (command, colorid)
+        return (command,) + generate_color()
     elif command == "rotate":
         return (command, random.randint(0, 360))
     elif command == "forward":
         return (command, int(random.betavariate(1, 3) * 150))
+
+
+def generate_color():
+    return (randint(0, 255), randint(0, 255), randint(0, 255))

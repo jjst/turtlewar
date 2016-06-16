@@ -1,7 +1,14 @@
-from turtlewar.model import Drawing, generate_drawing
+from turtlewar.model import Drawing, generate_drawing, generate_color
 import pytest
 import new
 import copy
+
+
+def test_generate_color():
+    for _ in xrange(100):
+        color = generate_color()
+        assert len(color) == 3
+        assert all(0 <= i <= 255 for i in color)
 
 
 class TestDrawing:

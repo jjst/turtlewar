@@ -1,19 +1,9 @@
-colors = [
-    [0, 0, 0],
-    [255, 255, 255],
-    [255, 0, 0],
-    [0, 255, 0],
-    [0, 0, 255],
-    [0, 255, 255],
-    [255, 0, 255],
-    [255, 255, 0]
-]
 
 var drawInstructions = function(instructions, canvasId) {
     return function(p) {
         var lineLength = 0;
         var drawn = 0;
-        var drawingSpeed = 8;
+        var drawingSpeed = 20;
         var penDown = false;
         var currentColor = [0, 0, 0];
         var transforms = [];
@@ -55,10 +45,12 @@ var drawInstructions = function(instructions, canvasId) {
             if(instructions.length == 0) {
                 return;
             }
-            var [command, value] = instructions.shift();
+            let instruction = instructions.shift();
+            let command = instruction[0];
+            let args = instruction.slice(1);
             switch(command) {
                 case "color":
-                    currentColor = colors[value];
+                    currentColor = args;
                     break;
                 case "down":
                     penDown = true;
@@ -67,9 +59,10 @@ var drawInstructions = function(instructions, canvasId) {
                     penDown = false;
                     break;
                 case "rotate":
-                    transforms.push(["rotate", value]);
+                    transforms.push(["rotate", args[0]]);
                     break;
                 case "forward":
+                    let value = args[0];
                     transforms.push(["translate", value + 1, 0]);
                     if(penDown) {
                         lineLength = value;
